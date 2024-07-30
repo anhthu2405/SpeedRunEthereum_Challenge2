@@ -13,12 +13,12 @@ const Events: NextPage = () => {
     fromBlock: 0n,
   });
 
-  // // SellTokens Events
-  // const { data: sellTokenEvents, isLoading: isSellEventsLoading } = useScaffoldEventHistory({
-  //   contractName: "Vendor",
-  //   eventName: "SellTokens",
-  //   fromBlock: 0n,
-  // });
+  // SellTokens Events
+  const { data: sellTokenEvents, isLoading: isSellEventsLoading } = useScaffoldEventHistory({
+    contractName: "Vendor",
+    eventName: "SellTokens",
+    fromBlock: 0n,
+  });
 
   return (
     <div className="flex items-center flex-col flex-grow pt-10">
@@ -49,14 +49,18 @@ const Events: NextPage = () => {
                     </td>
                   </tr>
                 ) : (
-                  buyTokenEvents?.map((event, index) => {
+                  buyTokenEvents.map((event, index) => {
+                    const buyer = event.args?.buyer || '';
+                    const amountOfTokens = event.args?.amountOfTokens || 0n;
+                    const amountOfETH = event.args?.amountOfETH || 0n;
+
                     return (
                       <tr key={index}>
                         <td className="text-center">
-                          <Address address={event.args.buyer} />
+                          <Address address={buyer} />
                         </td>
-                        <td>{formatEther(event.args?.amountOfTokens || 0n)}</td>
-                        <td>{formatEther(event.args?.amountOfETH || 0n)}</td>
+                        <td>{formatEther(amountOfTokens)}</td>
+                        <td>{formatEther(amountOfETH)}</td>
                       </tr>
                     );
                   })
@@ -68,7 +72,7 @@ const Events: NextPage = () => {
       </div>
 
       {/* SellTokens Events */}
-      {/* <div className="mt-14">
+      <div className="mt-14">
         <div className="text-center mb-4">
           <span className="block text-2xl font-bold">Sell Token Events</span>
         </div>
@@ -94,14 +98,18 @@ const Events: NextPage = () => {
                     </td>
                   </tr>
                 ) : (
-                  sellTokenEvents?.map((event, index) => {
+                  sellTokenEvents.map((event, index) => {
+                    const seller = event.args?.seller || '';
+                    const amountOfTokens = event.args?.amountOfTokens || 0n;
+                    const amountOfETH = event.args?.amountOfETH || 0n;
+
                     return (
                       <tr key={index}>
                         <td className="text-center">
-                          <Address address={event.args.seller} />
+                          <Address address={seller} />
                         </td>
-                        <td>{formatEther(event.args?.amountOfTokens || 0n)}</td>
-                        <td>{formatEther(event.args?.amountOfETH || 0n)}</td>
+                        <td>{formatEther(amountOfTokens)}</td>
+                        <td>{formatEther(amountOfETH)}</td>
                       </tr>
                     );
                   })
@@ -110,7 +118,7 @@ const Events: NextPage = () => {
             </table>
           </div>
         )}
-      </div> */}
+      </div>
     </div>
   );
 };
